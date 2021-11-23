@@ -36,10 +36,14 @@ def disable_All():
     Btn_6.unbind('<Button-1>')    
     Btn_7.config(fg="white", bg="gray", state=DISABLED)
     Btn_7.unbind('<Button-1>') 
-    Btn_LO1.config(fg="white", bg="gray", state=DISABLED)
-    Btn_LO1.unbind('<Button-1>') 
-    Btn_LO2.config(fg="white", bg="gray", state=DISABLED)
-    Btn_LO2.unbind('<Button-1>') 
+    Btn_L01.config(fg="white", bg="gray", state=DISABLED)
+    Btn_L01.unbind('<Button-1>') 
+    Btn_L02.config(fg="white", bg="gray", state=DISABLED)
+    Btn_L02.unbind('<Button-1>') 
+    Btn_L03.config(fg="white", bg="gray", state=DISABLED)
+    Btn_L03.unbind('<Button-1>') 
+    Btn_L04.config(fg="white", bg="gray", state=DISABLED)
+    Btn_L04.unbind('<Button-1>') 
 
 
 # --------------------------------------------------------------------------------------------------------------------------
@@ -106,22 +110,34 @@ def Initialize ():
     global TL_1
     global TL_2
     global TL_5
-    global S_LO1
-    global S_LO2
+    global S_L01
+    global S_L02
+    global S_L03
+    global S_L04
 
-    Btn_LO1.config (command=lambda: signal("lg1"))
-    Btn_LO1.config(text="GO",bg="Green",fg="Black")
+    Btn_L01.config (command=lambda: signal("lg1"))
+    Btn_L01.config(text="L01",bg="Green",fg="Black")
     Trk_1T=w.create_line(130, 50, 550, 50, fill="Black", width=3)
-    S_LO1="G"
+    S_L01="G"
+
+    Btn_L02.config (command=lambda: signal("lg2"))
+    Btn_L02.config(text="L02",bg="Green",fg="Black")
+    Trk_2T=w.create_line(130, 90, 550, 90, fill="Black", width=3)
+    S_L02="G"
     
-    Btn_LO2.config (command=lambda: signal("lg2"))
-    Btn_LO2.config(text="GO",bg="Green",fg="Black")
+    Btn_L03.config (command=lambda: signal("lg2"))
+    Btn_L03.config(text="L03",bg="Green",fg="Black")
     Trk_1B=w.create_line(130, 370, 550, 370, fill="Black", width=3)
-    S_LO2="G"
+    S_L03="G"
+
+    Btn_L04.config (command=lambda: signal("lg3"))
+    Btn_L04.config(text="L04",bg="Green",fg="Black")
+    Trk_2B=w.create_line(130, 330, 550, 330, fill="Black", width=3)
+    S_L04="G"
 
     Dev_2=w.create_line(400, 370, 470, 330, fill="#476042", width=3)
     Btn_2.config(bg="black",fg="white")
-    Btn_2.config(command=lambda: turn("f23"))
+    Btn_2.config(command=lambda: turn("f22"))
     S_2=False
     
     Dev_1B_4=w.create_line(200, 370, 250, 400, fill="#476042", width=3)
@@ -167,37 +183,69 @@ def signal(BtCmd):
     bluetooth.flushInput()  # This gives the bluetooth a little kick
     bluetooth.write(BtCmd.encode())
 #-----------------------------------------------------------------------------------------------------------------------
-def Btn_LO1Press(Event):
-    global S_LO1
-    if (S_LO1=="G"):
+def Btn_L01Press(Event):
+    global S_L01
+    if (S_L01=="G"):
          
-        Btn_LO1.config(command=lambda: signal("lh1"))
-        Btn_LO1.config(text="HALT",bg="Red",fg="Black")
+        Btn_L01.config(command=lambda: signal("lh1"))
+        Btn_L01.config(text="L01",bg="Red",fg="Black")
         Trk_1T=w.create_line(130, 50, 550, 50, fill="Red", width=3)
-        S_LO1="R"
+        S_L01="R"
         print("Pressed Red")
     else:
-        Btn_LO1.config (command=lambda: signal("lg1"))
-        Btn_LO1.config(text="GO",bg="Green",fg="Black")
+        Btn_L01.config (command=lambda: signal("lg1"))
+        Btn_L01.config(text="L01",bg="Green",fg="Black")
         Trk_1T=w.create_line(130, 50, 550, 50, fill="Black", width=3)
         print("Pressed green")   
-        S_LO1="G" 
-#--------------------------------------------------------------------------------------------------------------------------
-def Btn_LO2Press(Event):
-    global S_LO2
-    if (S_LO2=="G"):
+        S_L01="G" 
+#-----------------------------------------------------------------------------------------------------------------------
+def Btn_L02Press(Event):
+    global S_L02
+    if (S_L02=="G"):
          
-        Btn_LO2.config(command=lambda: signal("lh2"))
-        Btn_LO2.config(text="HALT",bg="Red",fg="Black")
-        Trk_1B=w.create_line(130, 370, 550, 370, fill="Red", width=3)
-        S_LO2="R"
+        Btn_L02.config(command=lambda: signal("lh2"))
+        Btn_L02.config(text="L02",bg="Red",fg="Black")
+        Trk_2T=w.create_line(130, 90, 550, 90, fill="Red", width=3)
+        S_L02="R"
         print("Pressed Red")
     else:
-        Btn_LO2.config (command=lambda: signal("lg2"))
-        Btn_LO2.config(text="GO",bg="Green",fg="Black")
+        Btn_L02.config (command=lambda: signal("lg2"))
+        Btn_L02.config(text="L02",bg="Green",fg="Black")
+        Trk_2T=w.create_line(130, 90, 550, 90, fill="Black", width=3)
+        print("Pressed green")   
+        S_L02="G"
+#--------------------------------------------------------------------------------------------------------------------------
+def Btn_L03Press(Event):
+    global S_L03
+    if (S_L03=="G"):
+         
+        Btn_L03.config(command=lambda: signal("lh2"))
+        Btn_L03.config(text="L03",bg="Red",fg="Black")
+        Trk_1B=w.create_line(130, 370, 550, 370, fill="Red", width=3)
+        S_L03="R"
+        print("Pressed Red")
+    else:
+        Btn_L03.config (command=lambda: signal("lg2"))
+        Btn_L03.config(text="L03",bg="Green",fg="Black")
         Trk_1B=w.create_line(130, 370, 550, 370, fill="Black", width=3)
         print("Pressed green")   
-        S_LO2="G" 
+        S_L03="G" 
+#--------------------------------------------------------------------------------------------------------------------------
+def Btn_L04Press(Event):
+    global S_L04
+    if (S_L04=="G"):
+         
+        Btn_L04.config(command=lambda: signal("lh3"))
+        Btn_L04.config(text="L04",bg="Red",fg="Black")
+        Trk_2B=w.create_line(130, 330, 550, 330, fill="Red", width=3)
+        S_L04="R"
+        print("Pressed Red")
+    else:
+        Btn_L04.config (command=lambda: signal("lg3"))
+        Btn_L04.config(text="L04",bg="Green",fg="Black")
+        Trk_2B=w.create_line(130, 330, 550, 330, fill="Black", width=3)
+        print("Pressed green")   
+        S_L04="G" 
 #--------------------------------------------------------------------------------------------------------------------------
 def Btn_2Press(Event):
     global S_2
@@ -291,9 +339,11 @@ S_4=False
 S_5=False
 S_6=False
 S_7=False
-S_LO1="G"
-S_LO2="G"
-S_LO5="G"
+S_L01="G"
+S_L02="G"
+S_L03="G"
+S_L04="G"
+S_L05="G"
 
 #============================== Form Creation ==========================================================================
 window = Tk()
@@ -309,10 +359,13 @@ style.theme_use('default')
 #--------------------------- Upper Section---------------------------------------------
 Trk_1T=w.create_line(130, 50, 550, 50, fill="#476042", width=3)
 Dev_1T_01=w.create_line(400, 90, 500, 50, fill="#476042", width=3)
-Trk_2T=w.create_line(130, 90, 550, 90, fill="#476042", width=3)
-Btn_LO1=Button(window, text="Go", bg='Green',
+Btn_L01=Button(window, text="L01", bg='Green',
             fg="Yellow", command=lambda: signal("lg1"))
-Btn_LO1.place(x=400, y=15)
+Btn_L01.place(x=400, y=15)
+Trk_2T=w.create_line(130, 90, 550, 90, fill="#476042", width=3)
+Btn_L02=Button(window, text="L02", bg='Green',
+            fg="Yellow", command=lambda: signal("lg2"))
+Btn_L02.place(x=400, y=95)
 #--------------------------- Left Section---------------------------------------------
 Trk_2L=w.create_line(100, 100, 100, 300, fill="#476042", width=3)
 Trk_1L=w.create_line(50, 50, 50, 380, fill="#476042", width=3)
@@ -327,10 +380,13 @@ Trk_2B=w.create_line(130, 330, 550, 330, fill="#476042", width=3)
 Dev_2=w.create_line(400, 370, 470, 330, fill="#476042", width=3)
 Btn_2=Button(window, text="Turn 2", bg='Black',
             fg="White", command=lambda: turn("r22"))
-Btn_2.place(x=400, y=375) 
-Btn_LO2=Button(window, text="Go", bg='Green',
+Btn_2.place(x=355, y=335) 
+Btn_L03=Button(window, text="L03", bg='Green',
             fg="Yellow", command=lambda: signal("lg2"))
-Btn_LO2.place(x=450, y=300)  
+Btn_L03.place(x=450, y=375)  
+Btn_L04=Button(window, text="L04", bg='Green',
+            fg="Yellow", command=lambda: signal("lg3"))
+Btn_L04.place(x=450, y=300)
 
 #--------------------------- Right Section---------------------------------------------
 Trk_2R=w.create_line(620, 50, 620, 380, fill="#476042", width=3)
@@ -365,9 +421,13 @@ Btn_6.bind('<Button-1>', Btn_6Press)
 # =============================================================================================================================
 Btn_7.bind('<Button-1>', Btn_7Press)
 # =============================================================================================================================
-Btn_LO1.bind('<Button-1>', Btn_LO1Press)  
+Btn_L01.bind('<Button-1>', Btn_L01Press)  
 # =============================================================================================================================
-Btn_LO2.bind('<Button-1>', Btn_LO2Press)  
+Btn_L02.bind('<Button-1>', Btn_L02Press)  
+# =============================================================================================================================
+Btn_L03.bind('<Button-1>', Btn_L03Press)  
+# =============================================================================================================================
+Btn_L04.bind('<Button-1>', Btn_L04Press)  
 # =============================================================================================================================
 reset = Button(window, text="  Reset   ", command=lambda: turn("init"))
 reset.place(x=300, y=450)
@@ -391,38 +451,36 @@ Block_Data=[" "," "," "]
 while (1):
     #print("while")
     window.update()
-    time.sleep(0.05)
-    
     test_ser=bluetooth.in_waiting
     if (BTtestOK==1 ):
         BTtestOK=0
         bluetooth.flushInput()
     else: 
         if (test_ser>0):
-            print("TS= ", test_ser)
+            #print("TS= ", test_ser)
             blockIn=bluetooth.read()
             Block_Data[0]= blockIn.decode()
-            print("0= ",Block_Data[0])
+            #print("0= ",Block_Data[0])
             
             if (Block_Data[0]!=" "):
             
                 blockIn=bluetooth.read()
                 Block_Data[1]= blockIn.decode()
-                print("1= ",Block_Data[1])
+                #print("1= ",Block_Data[1])
                 
                 blockIn=bluetooth.read()
                 Block_Data[2]= blockIn.decode()
-                print("2= ",Block_Data[2])
+                #print("2= ",Block_Data[2])
 
-                #print(Block_Data)
+                print(Block_Data)
 
                 # 1 Byte= state L=Low(free) H=High(occupied)
                 # 2 Byte = type D= deviatoio T=Track
                 # 3 Byte = identification 5 means Deviatoio #5 D5
                 Element= Block_Data[1] + Block_Data[2]
                 Status= Block_Data[0]
-                print ("ele",Element)
-                print ("Status",Status)
+                #print ("ele",Element)
+                #print ("Status",Status)
                 
                 if (Status=="H"):
                     if (Element=="D6"): 
@@ -438,12 +496,12 @@ while (1):
                         Trk_Dev4=w.create_line(250, 400, 350, 400, fill="RED", width=3)
                         window.update()
                     elif (Element=="D5"): 
-                        print("Dev5 Occupato")
+                        #print("Dev5 Occupato")
                         Trk_5=w.create_line(200, 240, 540, 240, fill="RED", width=3)
                         window.update()
 
                     else:
-                        print("Elemento non Identificato")
+                        print("Elemento Occupato non Identificato")
                 
                 elif (Status=="L"):
                     if (Element=="D6"): 
@@ -459,14 +517,14 @@ while (1):
                         Trk_Dev4=w.create_line(250, 400, 350, 400, fill="BLACK", width=3)
                         window.update()
                     elif (Element=="D5"): 
-                        print("Dev5 Libero")
+                        #print("Dev5 Libero")
                         Trk_5=w.create_line(200, 240, 540, 240, fill="BLACK", width=3)
                         window.update()
                     else:
-                        print("Elemento non Identificato")
+                        print("Elemento libero non Identificato")
                 else:
                     print ("stato sconosciuto")                    
                 
-                Block_Data=[" "," "," "]
+    Block_Data=[" "," "," "]
             
 
