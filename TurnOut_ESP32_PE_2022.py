@@ -62,7 +62,7 @@ def BT_Connect():
             global bluetooth
             bluetooth = serial.Serial(port, 115200, write_timeout=1)
             bluetooth.flushInput()
-            
+            print("p1= ", p[1])
             if ("Bluetooth" in p[1]):
                 print("la porta BT= ", port)
                 bluetooth.write(b"test")
@@ -86,9 +86,8 @@ def BT_Connect():
         
         if(exitfor=='y'):
             break
-            
-            if(exitfor=='n'):
-                disable_All()
+    if(exitfor=='n'):
+        disable_All()
 #------------------------------------------------------------------------------------------------------------------------
 def Initialize ():
 
@@ -165,6 +164,11 @@ def Initialize ():
     Btn_7.config(command=lambda: turn("f77"))
     S_7=False
 
+    signal("lg1")
+    signal("lg2")
+    signal("lg3")
+    signal("lg4")
+
 #-----------------------------------------------------------------------------------------------------------------------
 def turn(BtCmd):
 
@@ -219,13 +223,13 @@ def Btn_L03Press(Event):
     global S_L03
     if (S_L03=="G"):
          
-        Btn_L03.config(command=lambda: signal("lh2"))
+        Btn_L03.config(command=lambda: signal("lh3"))
         Btn_L03.config(text="L03",bg="Red",fg="Black")
         Trk_1B=w.create_line(130, 370, 550, 370, fill="Red", width=3)
         S_L03="R"
         print("Pressed Red")
     else:
-        Btn_L03.config (command=lambda: signal("lg2"))
+        Btn_L03.config (command=lambda: signal("lg3"))
         Btn_L03.config(text="L03",bg="Green",fg="Black")
         Trk_1B=w.create_line(130, 370, 550, 370, fill="Black", width=3)
         print("Pressed green")   
@@ -235,13 +239,13 @@ def Btn_L04Press(Event):
     global S_L04
     if (S_L04=="G"):
          
-        Btn_L04.config(command=lambda: signal("lh3"))
+        Btn_L04.config(command=lambda: signal("lh4"))
         Btn_L04.config(text="L04",bg="Red",fg="Black")
         Trk_2B=w.create_line(130, 330, 550, 330, fill="Red", width=3)
         S_L04="R"
         print("Pressed Red")
     else:
-        Btn_L04.config (command=lambda: signal("lg3"))
+        Btn_L04.config (command=lambda: signal("lg4"))
         Btn_L04.config(text="L04",bg="Green",fg="Black")
         Trk_2B=w.create_line(130, 330, 550, 330, fill="Black", width=3)
         print("Pressed green")   
