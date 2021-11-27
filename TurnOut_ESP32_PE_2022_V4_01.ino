@@ -30,7 +30,7 @@ char servopos[3]; //4 is the string leght for Bluethooth command (F12, R12,...)
 // block for IR module
 unsigned int busyPins[]= {0, 0, 0, 0, 32, 33};  // array for occupation signal where connected occupation modules
 unsigned int itrPins []= {0, 0, 0, 0, 16, 17}; //array for pin where to connect ifr chip data pin used for interrpt 
-unsigned int relayPins[]= {19, 19, 0, 0, 0,0};  // array for Line Halt-Go 
+unsigned int relayPins[]= {25, 26, 27, 13, 0,0};  // array for Line Halt-Go 
 
 int valBlock;     // variable to store result
 int idxIR=0;      // store which IR started interrupt
@@ -170,31 +170,32 @@ if (idxIR!=0){
             digitalWrite(relayPins[0], HIGH);
           }
         else{
-          //Serial.println("GO track T1");
-          //Serial.println(busyPins[0]);
           digitalWrite(relayPins[0], LOW);  
         }
       }
       if ((servopos[0] == 'l')  && (servopos[2]=='2')) { // Check Track 1
           if (servopos[1]=='h'){
-            //Serial.println(busyPins[1]);
             digitalWrite(relayPins[1], HIGH);
           }
         else{
-          //Serial.println("GO track T2");
-          //Serial.println(busyPins[1]);
           digitalWrite(relayPins[1], LOW);  
         }
       }
-      if ((servopos[0] == 'l')  && (servopos[2]=='5')) { // Check Track 1
+      if ((servopos[0] == 'l')  && (servopos[2]=='3')) { // Check Track 1
           if (servopos[1]=='h'){
-            //Serial.println(busyPins[4]);
-            digitalWrite(relayPins[4], HIGH);
+            digitalWrite(relayPins[2], HIGH);
           }
         else{
-          //Serial.println("GO track R2");
-          //Serial.println(busyPins[4]);
-          digitalWrite(relayPins[4], LOW);  
+          digitalWrite(relayPins[2], LOW);  
+        }
+      }
+      if ((servopos[0] == 'l')  && (servopos[2]=='4')) { // Check Track 1
+          if (servopos[1]=='h'){
+            digitalWrite(relayPins[3], HIGH);
+          }
+        else{
+
+          digitalWrite(relayPins[3], LOW);  
         }
       }
       
@@ -255,11 +256,16 @@ if (idxIR!=0){
     
     if (servopos[0] == 'i') {
       Serial.println("reset");
-       for(int i=0; i<numItems; i++)
-      {
-        //Serial.println(i);
-        Turn_FW(i);
-       }
+
+      for (int i=0; i<6;i++){
+        if (relayPins[i]!=0){
+          digitalWrite(relayPins[i], LOW); //array of relay
+        }
+      }
+      for(int i=0; i<numItems; i++){
+       //Serial.println(i);
+       Turn_FW(i);
+      }
     }
   }
 //delay(100);
