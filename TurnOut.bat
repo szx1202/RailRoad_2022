@@ -1,0 +1,1 @@
+python C:\Users\setzi\OneDrive\01-Sources\02-ESP32\01-Modellismo\TurnOut_ESP32_PE_2022\TurnOut_ESP32_PE_2022.py

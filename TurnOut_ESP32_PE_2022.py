@@ -12,12 +12,13 @@ from tkinter import Canvas, ttk
 # from tkinter import ttk
 # from tkinter import *
 # from tkinter.ttk import *
-import serial
-import time
+
 import platform
 import os.path
 import serial.tools.list_ports
 import bluetooth
+import serial
+import time
 import sys
 
 #---------------------------------------------------------------------------------------------------------------------------
@@ -36,6 +37,10 @@ def disable_All():
     Btn_6.unbind('<Button-1>')    
     Btn_7.config(fg="white", bg="gray", state=DISABLED)
     Btn_7.unbind('<Button-1>') 
+    Btn_8.config(fg="white", bg="gray", state=DISABLED)
+    Btn_8.unbind('<Button-1>')
+    Btn_9.config(fg="white", bg="gray", state=DISABLED)
+    Btn_9.unbind('<Button-1>')
     Btn_L01.config(fg="white", bg="gray", state=DISABLED)
     Btn_L01.unbind('<Button-1>') 
     Btn_L02.config(fg="white", bg="gray", state=DISABLED)
@@ -47,47 +52,49 @@ def disable_All():
 
 
 # --------------------------------------------------------------------------------------------------------------------------
-def BT_Connect():
-    # port="/dev/tty.HC-06-DevB" #This will be different for various devices and on windows it will probably be a COM port.      
 
-    global BTtestOK
-    ports = list(serial.tools.list_ports.comports())
-    exitfor=""
+# def BT_Connect2():
+#     global port
+#     global bluetooth
+#     global BTtestOK
+
+#     BTtestOK=0
+#     myports = [tuple(p) for p in list(serial.tools.list_ports.comports())]
+#     print(myports)
     
+#     if "Standard Serial over Bluetooth" in myports:
+#         print ("Arduino has been disconnected!")
+    
+def BT_Connect():
+    global port
+    global bluetooth
+    global BTtestOK
+
     BTtestOK=0
+    ports = list(serial.tools.list_ports.comports())
+    #print(ports)
     for p in ports:
         port = p[0]
-        print("lista porte ", port)
+        print (port)
         try:
-            global bluetooth
-            bluetooth = serial.Serial(port, 115200, write_timeout=1)
+            bluetooth = serial.Serial(port, 115200, timeout=1)
             bluetooth.flushInput()
-            print("p1= ", p[1])
-            if ("Bluetooth" in p[1]):
-                print("la porta BT= ", port)
-                bluetooth.write(b"test")
-                time.sleep(0.1)
-                input_data = bluetooth.read()
-                # These are bytes coming in so a decode is needed
-                print(input_data.decode())
-                if(input_data.decode()=='k'):
-                    BTtestOK=1
-                    exitfor='y'
-                    print("la porta BT= ", port)
-                lblConn = Label(window, text="Connected", fg="green")
-                lblConn.place(x=100, y=10)
-                return bluetooth
-
-        except serial.serialutil.SerialException:
-            print("NOT Connected")
-            exitfor='n'
-            #lblConn = Label(window, text="NO Bluetooth Connection", fg="red")
-            #lblConn.place(x=250, y=200)
+            bluetooth.write(b"test")
+            time.sleep(0.1)
         
-        if(exitfor=='y'):
-            break
-    if(exitfor=='n'):
-        disable_All()
+            input_data = bluetooth.read()
+            if(input_data.decode()=='k'):
+                BTtestOK=1
+                print("la porta BT= ", port)
+                break
+        except serial.serialutil.SerialException:
+            print("NOT Connected ", port)
+    lblConn = Label(window, text="Connected", fg="green")
+    lblConn.place(x=100, y=10)
+    if (BTtestOK!=1):
+        print("disable_All()")
+    return bluetooth
+    
 #------------------------------------------------------------------------------------------------------------------------
 def Initialize ():
 
@@ -106,6 +113,13 @@ def Initialize ():
     global Btn_7
     global Dev_7
     global S_7
+    global Btn_8
+    global Dev_8
+    global Dev_8_1
+    global S_8
+    global Btn_9
+    global Dev_9
+    global S_9
     global TL_1
     global TL_2
     global TL_5
@@ -115,22 +129,22 @@ def Initialize ():
     global S_L04
 
     Btn_L01.config (command=lambda: signal("lg1"))
-    Btn_L01.config(text="L01",bg="Green",fg="Black")
+    Btn_L01.config(text="L01",bg="Green",fg="Yellow")
     Trk_1T=w.create_line(130, 50, 550, 50, fill="Black", width=3)
     S_L01="G"
 
     Btn_L02.config (command=lambda: signal("lg2"))
-    Btn_L02.config(text="L02",bg="Green",fg="Black")
+    Btn_L02.config(text="L02",bg="Green",fg="Yellow")
     Trk_2T=w.create_line(130, 90, 550, 90, fill="Black", width=3)
     S_L02="G"
     
     Btn_L03.config (command=lambda: signal("lg2"))
-    Btn_L03.config(text="L03",bg="Green",fg="Black")
+    Btn_L03.config(text="L03",bg="Green",fg="Yellow")
     Trk_1B=w.create_line(130, 370, 550, 370, fill="Black", width=3)
     S_L03="G"
 
     Btn_L04.config (command=lambda: signal("lg3"))
-    Btn_L04.config(text="L04",bg="Green",fg="Black")
+    Btn_L04.config(text="L04",bg="Green",fg="Yellow")
     Trk_2B=w.create_line(130, 330, 550, 330, fill="Black", width=3)
     S_L04="G"
 
@@ -164,6 +178,16 @@ def Initialize ():
     Btn_7.config(command=lambda: turn("f77"))
     S_7=False
 
+    Dev_8=w.create_line(500, 90, 385, 150, fill="Black", width=3)
+    Dev_8_1=w.create_line(442.5,120,385,150, fill="Black", width=3)
+    
+    Btn_8.config(bg="black")
+    Btn_8.config(fg="white")
+
+    Dev_9=w.create_line(440, 120, 385, 120, fill="Black", width=3)
+    Btn_9.config(bg="black")
+    Btn_9.config(fg="white")
+
     signal("lg1")
     signal("lg2")
     signal("lg3")
@@ -193,12 +217,12 @@ def Btn_L01Press(Event):
          
         Btn_L01.config(command=lambda: signal("lh1"))
         Btn_L01.config(text="L01",bg="Red",fg="Black")
-        Trk_1T=w.create_line(130, 50, 550, 50, fill="Red", width=3)
+        Trk_1T=w.create_line(130, 50, 550, 50, fill="Orange", width=3)
         S_L01="R"
         print("Pressed Red")
     else:
         Btn_L01.config (command=lambda: signal("lg1"))
-        Btn_L01.config(text="L01",bg="Green",fg="Black")
+        Btn_L01.config(text="L01",bg="Green",fg="Yellow")
         Trk_1T=w.create_line(130, 50, 550, 50, fill="Black", width=3)
         print("Pressed green")   
         S_L01="G" 
@@ -209,12 +233,12 @@ def Btn_L02Press(Event):
          
         Btn_L02.config(command=lambda: signal("lh2"))
         Btn_L02.config(text="L02",bg="Red",fg="Black")
-        Trk_2T=w.create_line(130, 90, 550, 90, fill="Red", width=3)
+        Trk_2T=w.create_line(130, 90, 550, 90, fill="Orange", width=3)
         S_L02="R"
         print("Pressed Red")
     else:
         Btn_L02.config (command=lambda: signal("lg2"))
-        Btn_L02.config(text="L02",bg="Green",fg="Black")
+        Btn_L02.config(text="L02",bg="Green",fg="Yellow")
         Trk_2T=w.create_line(130, 90, 550, 90, fill="Black", width=3)
         print("Pressed green")   
         S_L02="G"
@@ -225,12 +249,12 @@ def Btn_L03Press(Event):
          
         Btn_L03.config(command=lambda: signal("lh3"))
         Btn_L03.config(text="L03",bg="Red",fg="Black")
-        Trk_1B=w.create_line(130, 370, 550, 370, fill="Red", width=3)
+        Trk_1B=w.create_line(130, 370, 550, 370, fill="Orange", width=3)
         S_L03="R"
         print("Pressed Red")
     else:
         Btn_L03.config (command=lambda: signal("lg3"))
-        Btn_L03.config(text="L03",bg="Green",fg="Black")
+        Btn_L03.config(text="L03",bg="Green",fg="Yellow")
         Trk_1B=w.create_line(130, 370, 550, 370, fill="Black", width=3)
         print("Pressed green")   
         S_L03="G" 
@@ -241,12 +265,12 @@ def Btn_L04Press(Event):
          
         Btn_L04.config(command=lambda: signal("lh4"))
         Btn_L04.config(text="L04",bg="Red",fg="Black")
-        Trk_2B=w.create_line(130, 330, 550, 330, fill="Red", width=3)
+        Trk_2B=w.create_line(130, 330, 550, 330, fill="Orange", width=3)
         S_L04="R"
         print("Pressed Red")
     else:
         Btn_L04.config (command=lambda: signal("lg4"))
-        Btn_L04.config(text="L04",bg="Green",fg="Black")
+        Btn_L04.config(text="L04",bg="Green",fg="Yellow")
         Trk_2B=w.create_line(130, 330, 550, 330, fill="Black", width=3)
         print("Pressed green")   
         S_L04="G" 
@@ -333,7 +357,44 @@ def Btn_7Press(Event):
         Btn_7.config(fg="White")
         S_7=False
 
+def Btn_8Press(Event):
+    global S_8
 
+    if S_8==False:
+        Dev_8=w.create_line(500, 90, 385, 150, fill="#1f1", width=3)
+        Dev_8_1=w.create_line(442.5,120,385,150, fill="#1f1", width=3)
+        Btn_8.config(command=lambda: turn("r88"))
+        Btn_8.config(bg="red")
+        Btn_8.config(fg="blue")
+        S_8=True
+    else:
+        Dev_8=w.create_line(500, 90, 385, 150, fill="Black", width=3)
+        Dev_8_1=w.create_line(442.5,120,385,150, fill="Black", width=3)
+        Btn_8.config(command=lambda: turn("f88"))
+        Btn_8.config(bg="Black")
+        Btn_8.config(fg="White")
+        S_8=False
+
+def Btn_9Press(Event):
+    global S_9
+
+    if S_9==False:
+        Dev_9=w.create_line(440, 120, 385, 120, fill="#1f1", width=3)
+        Dev_8=w.create_line(500, 90, 442.5, 120, fill="#1f1", width=3)
+        Dev_8_1=w.create_line(442.5,120,385,150, fill="Black", width=3)
+        Btn_9.config(command=lambda: turn("r99"))
+        Btn_9.config(bg="red")
+        Btn_9.config(fg="blue")
+        S_9=True
+    else:
+        Dev_9=w.create_line(440, 120, 385, 120, fill="Black", width=3)
+        if S_8==True:
+            Dev_8=w.create_line(500, 90, 442.5, 120, fill="#1f1", width=5)
+            Dev_8_1=w.create_line(442.5,120,385,150, fill="#1f1", width=3)
+        Btn_9.config(command=lambda: turn("f99"))
+        Btn_9.config(bg="Black")
+        Btn_9.config(fg="White")
+        S_9=False
 
 # ############################################## MAIN CODE ################################################################
 
@@ -343,6 +404,8 @@ S_4=False
 S_5=False
 S_6=False
 S_7=False
+S_8=False
+S_9=False
 S_L01="G"
 S_L02="G"
 S_L03="G"
@@ -362,14 +425,25 @@ style.theme_use('default')
 
 #--------------------------- Upper Section---------------------------------------------
 Trk_1T=w.create_line(130, 50, 550, 50, fill="#476042", width=3)
-Dev_1T_01=w.create_line(400, 90, 500, 50, fill="#476042", width=3)
+Dev_1T_01=w.create_line(300, 90, 400, 50, fill="#476042", width=3)
 Btn_L01=Button(window, text="L01", bg='Green',
             fg="Yellow", command=lambda: signal("lg1"))
-Btn_L01.place(x=400, y=15)
+Btn_L01.place(x=300, y=15)
 Trk_2T=w.create_line(130, 90, 550, 90, fill="#476042", width=3)
 Btn_L02=Button(window, text="L02", bg='Green',
             fg="Yellow", command=lambda: signal("lg2"))
-Btn_L02.place(x=400, y=95)
+Btn_L02.place(x=300, y=95)
+#Dev_8=w.create_line(500, 90, 385, 150, fill="#476042", width=3)
+Dev_8=w.create_line(500, 90, 442.5, 120, fill="#476042", width=3)
+Dev_8_1=w.create_line(442.5,120,385,150, fill="#476042", width=3)
+Btn_8=Button(window, text="Turn 8", bg='Black',
+            fg="White", command=lambda: turn("r88"))
+Btn_8.place(x=500, y=60) 
+
+Dev_9=w.create_line(442.5, 120, 385, 120, fill="#476042", width=3)
+Btn_9=Button(window, text="Turn 9", bg='Black',
+            fg="White", command=lambda: turn("r99"))
+Btn_9.place(x=450, y=120) 
 #--------------------------- Left Section---------------------------------------------
 Trk_2L=w.create_line(100, 100, 100, 300, fill="#476042", width=3)
 Trk_1L=w.create_line(50, 50, 50, 380, fill="#476042", width=3)
@@ -425,6 +499,11 @@ Btn_6.bind('<Button-1>', Btn_6Press)
 # =============================================================================================================================
 Btn_7.bind('<Button-1>', Btn_7Press)
 # =============================================================================================================================
+Btn_8.bind('<Button-1>', Btn_8Press)
+# =============================================================================================================================
+# =============================================================================================================================
+Btn_9.bind('<Button-1>', Btn_9Press)
+# =============================================================================================================================
 Btn_L01.bind('<Button-1>', Btn_L01Press)  
 # =============================================================================================================================
 Btn_L02.bind('<Button-1>', Btn_L02Press)  
@@ -441,7 +520,7 @@ esci.place(x=380, y=450)
 # ============================================================================================================================
 
 PlatF=platform.system()
-print(PlatF)
+#print(PlatF)
 if (PlatF=="Windows"):
     BCK_COL="#F0F0F0"
 else:
