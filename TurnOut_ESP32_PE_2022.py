@@ -64,6 +64,8 @@ def disable_All():
     
 #     if "Standard Serial over Bluetooth" in myports:
 #         print ("Arduino has been disconnected!")
+
+#https://geektechstuff.com/2020/06/01/python-and-bluetooth-part-1-scanning-for-devices-and-services-python/
     
 def BT_Connect():
     global port
@@ -72,27 +74,32 @@ def BT_Connect():
 
     BTtestOK=0
     ports = list(serial.tools.list_ports.comports())
-    #print(ports)
+    
     for p in ports:
         port = p[0]
-        print (port)
+        print (p[0])
+        #print (p[1])
+        #print (p[2])
+        
         try:
             bluetooth = serial.Serial(port, 115200, timeout=1)
             bluetooth.flushInput()
-            bluetooth.write(b"test")
+            bluetooth.write(b" test")
             time.sleep(0.1)
         
-            input_data = bluetooth.read()
+            input_data = bluetooth.readline()
             if(input_data.decode()=='k'):
                 BTtestOK=1
                 print("la porta BT= ", port)
                 break
         except serial.serialutil.SerialException:
             print("NOT Connected ", port)
+            serial.Serial.close
     lblConn = Label(window, text="Connected", fg="green")
     lblConn.place(x=100, y=10)
     if (BTtestOK!=1):
-        print("disable_All()")
+        print("disable all")
+        disable_All()
     return bluetooth
     
 #------------------------------------------------------------------------------------------------------------------------
@@ -389,8 +396,10 @@ def Btn_9Press(Event):
     else:
         Dev_9=w.create_line(440, 120, 385, 120, fill="Black", width=3)
         if S_8==True:
-            Dev_8=w.create_line(500, 90, 442.5, 120, fill="#1f1", width=5)
+            Dev_8=w.create_line(500, 90, 442.5, 120, fill="#1f1", width=3)
             Dev_8_1=w.create_line(442.5,120,385,150, fill="#1f1", width=3)
+        else:
+            Dev_8=w.create_line(500, 90, 385, 150, fill="Black", width=3)
         Btn_9.config(command=lambda: turn("f99"))
         Btn_9.config(bg="Black")
         Btn_9.config(fg="White")
